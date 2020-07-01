@@ -32,7 +32,7 @@ async function getUser ({ username, password }) {
         }
         return user;
     } catch (e) {
-        console.log(`Could not authenticate user`)
+        console.log(`Could not authenticate user`, e)
     }    
 }
 

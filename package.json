@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed-dev": "node server/db/seed.js",
     "start:client": "webpack --watch",
+    "start:server-dev": "nodemon server/index.js",
     "start:server": "node server/index.js",
     "start:dev": "npm run start:client & npm run start:server"
   },

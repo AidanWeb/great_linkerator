@@ -34,7 +34,8 @@ async function createTables () {
             CREATE TABLE links (
                 id SERIAL PRIMARY KEY,
                 "creatorId" INTEGER REFERENCES users(id),
-                link VARCHAR(255) UNIQUE NOT NULL,
+                title VARCHAR(255) UNIQUE NOT NULL,
+                url VARCHAR(255) UNIQUE NOT NULL,
                 comment TEXT NOT NULL,
                 clicks INTEGER DEFAULT 0,
                 date VARCHAR(255) NOT NULL
@@ -68,8 +69,8 @@ async function createInitialData () {
     try {
         await createUser ({username: "adubs", password: "password1"});
 
-        await createLink ({creatorId: 1, link: "http://google.com", comment: "Little site for all your searching needs"});
-        await createLink ({creatorId: 1, link: "http://reddit.com", comment: "The front page of the internet"});
+        await createLink ({creatorId: 1, title: "Google", url: "http://google.com", comment: "Little site for all your searching needs"});
+        await createLink ({creatorId: 1, title: "Reddit", url: "http://reddit.com", comment: "The front page of the internet"});
 
         await createTag ({name: "tagLife"});
 

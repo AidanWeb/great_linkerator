@@ -54,15 +54,16 @@ async function getLinkById(id) {
 }
 
 //      CREATE: 
-async function createLink({creatorId, link, comment}) {
-    const date = new Date();
+async function createLink({creatorId, title, url, comment}) {
+    const now = new Date();
+    const date = now.toLocaleDateString("en-US")
 
     try {
         const { rows } = await client.query(`
-            INSERT INTO links ("creatorId", link, comment, date)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO links ("creatorId", title, url, comment, date)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING *;
-        `, [creatorId, link, comment, date]);
+        `, [creatorId, title, url, comment, date]);
 
         return rows;
     } catch (e) {

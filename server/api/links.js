@@ -20,10 +20,10 @@ linksRouter.get('/', async(req, res, next) => {
 
 linksRouter.post('/', requireUser, async (req, res, next) => {
     const { id: creatorId } = req.user;
-    const { link, comment  } = req.body;
-
+    const { title, url, comment  } = req.body;
+    console.log(`reqbody: `, req.body)
     try {
-        const newLink = await createLink({creatorId, link, comment})
+        const newLink = await createLink({creatorId, title, url, comment})
 
         res.send({message: "Link created successfully", link: newLink});
     } catch (e) {
@@ -45,19 +45,13 @@ linksRouter.post('/:id', async (req, res, next) => {
     }
 })
 
+
 linksRouter.patch('/:linkId', requireUser, async (req, res, next) => {
     const { linkId: id } = req.params;
-    const { link, comment } = req.body;
+    const { link, comment, title } = req.body;
     const user = req.user;
 
     try {
-        if (!link && !comment) {
-            const clickedLink = await incrementClicks(id);
-            return res.send({
-                name: 'link clicked',
-                link: clickedLink
-            });
-        }
         const {creatorId} = await getLinkById(id);
         if (creatorId !== user.id) {
             return next({
@@ -65,7 +59,7 @@ linksRouter.patch('/:linkId', requireUser, async (req, res, next) => {
                 message: 'Only the creator can make changes to a routine'
             })
         }
-        const updatedLink = await updateLink({id, link, comment});
+        const updatedLink = await updateLink({id, link, comment, title});
         console.log(updatedLink)
         return res.send({message: "Link Updated", updatedLink});
         
@@ -73,6 +67,23 @@ linksRouter.patch('/:linkId', requireUser, async (req, res, next) => {
         next(e);
     }
 })
+
+/* linksRouter.patch('/click/:linkId', async (req, res, next) => {
+    const { linkId: id } = req.params;
+    const { link, comment, title } = req.body;
+
+    try {
+        if (!link && !comment && !title) {
+            const clickedLink = await incrementClicks(id);
+            return res.send({
+                name: 'link clicked',
+                link: clickedLink
+            });
+        }
+    } catch (e) {
+        next(e);
+    }
+}) */
 
 linksRouter.delete('/:linkId', requireUser, async (req, res, next) => {
     const { linkId: id } = req.params;
